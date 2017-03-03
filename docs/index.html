@@ -14,7 +14,9 @@
 		messagingSenderId: "552056702141"
 	};
 	firebase.initializeApp(config);
+	// Create reference to track the /presses node
 	var database = firebase.database();
+	var pressesRef = database.ref('presses');
 	
 	// Load the Visualization API and the corechart package.
 	google.charts.load('current', {'packages':['corechart','gauge','line']});
@@ -28,28 +30,18 @@
 		data = new google.visualization.DataTable();
 		data.addColumn('datetime', 'Time');
 		data.addColumn('number', 'Press Count');
-		getData();
-	}
-	// Callback for fetching the complete set of JSON data and building the Datatable
-	function getData() {
-		var lastVal = 0;
-		var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				var jsonData = JSON.parse(xhttp.responseText);
-				for (var row in jsonData) {
-					lastVal = parseInt(jsonData[row].count);
+		
+		pressesRef.on('value', function(snapshot) {
+				// Add any new data to the table
+				for (var sample in snapshot.val()) {
 					data.addRow([
-							(new Date(parseInt(row) * 1000)),
-							lastVal
+							(new Date(parseInt(sample) * 1000)),
+							parseInt(snapshot.val()[sample].count)
 					]);
 				}
+				// Redraw the chart with the new data
 				drawChart(data);
-			}
-		}
-		
-		xhttp.open("GET", JSON_URL, true);
-		xhttp.send();
+		});
 	}
 		
 	// Callback for updating the chart
