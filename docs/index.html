@@ -1,0 +1,78 @@
+<html>
+  <head>
+	<!--Load the AJAX API-->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.7.0/firebase.js"></script>
+	<script>
+	// Initialize Firebase
+	const JSON_URL = "https://big-red-button-f8fd8.firebaseio.com/presses.json";
+	var config = {
+		apiKey: "AIzaSyCLQXc0xwf85Pvizs9ypQKMfimi_M2goRw",
+		authDomain: "big-red-button-f8fd8.firebaseapp.com",
+		databaseURL: "https://big-red-button-f8fd8.firebaseio.com",
+		storageBucket: "big-red-button-f8fd8.appspot.com",
+		messagingSenderId: "552056702141"
+	};
+	firebase.initializeApp(config);
+	var database = firebase.database();
+	
+	// Load the Visualization API and the corechart package.
+	google.charts.load('current', {'packages':['corechart','gauge','line']});
+	
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.charts.setOnLoadCallback(initialize);
+	
+	var data = null;
+	
+	function initialize() {
+		data = new google.visualization.DataTable();
+		data.addColumn('datetime', 'Time');
+		data.addColumn('number', 'Press Count');
+		getData();
+	}
+	// Callback for fetching the complete set of JSON data and building the Datatable
+	function getData() {
+		var lastVal = 0;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				var jsonData = JSON.parse(xhttp.responseText);
+				for (var row in jsonData) {
+					lastVal = parseInt(jsonData[row].count);
+					data.addRow([
+							(new Date(parseInt(row) * 1000)),
+							lastVal
+					]);
+				}
+				drawChart(data);
+			}
+		}
+		
+		xhttp.open("GET", JSON_URL, true);
+		xhttp.send();
+	}
+		
+	// Callback for updating the chart
+	function drawChart(data) {
+		// Instantiate and draw our chart, passing in some options.
+		var chart = new google.visualization.LineChart(document.getElementById('chart'));
+		chart.draw(data, { 'title':'Button Presses', 'interpolateNulls':true, 'height':480,
+				'legend':{position:'none'},
+				hAxis: {
+					title: 'Time'
+				},
+				vAxis: {
+					title: 'Presses'
+				}
+		});
+	}
+		
+	</script>
+  </head>
+
+  <body>
+	<center>
+	<div id="chart"></div>
+	</center>
+  </body>
+</html>
