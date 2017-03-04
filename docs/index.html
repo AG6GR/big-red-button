@@ -31,14 +31,13 @@
 		data.addColumn('datetime', 'Time');
 		data.addColumn('number', 'Press Count');
 		
-		pressesRef.on('value', function(snapshot) {
-				// Add any new data to the table
-				for (var sample in snapshot.val()) {
-					data.addRow([
-							(new Date(parseInt(sample) * 1000)),
-							parseInt(snapshot.val()[sample].count)
-					]);
-				}
+		pressesRef.on('child_added', function(snapshot) {
+				// Add new data to the table
+				//console.log(snapshot.key + ", " + snapshot.val());
+				data.addRow([
+						(new Date(parseInt(snapshot.key) * 1000)),
+						parseInt(snapshot.val().count)
+				]);
 				// Redraw the chart with the new data
 				drawChart(data);
 		});
