@@ -25,12 +25,24 @@
 	google.charts.setOnLoadCallback(initialize);
 	
 	var data = null;
+	var gaugeData = null;
+	
+	var chart = null;
+	var gauge = null;
 	
 	function initialize() {
 		data = new google.visualization.DataTable();
 		data.addColumn('datetime', 'Time');
 		data.addColumn('number', 'Press Count');
 		
+		gaugeData = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Presses', 0]
+        ]);
+		
+        chart = new google.visualization.LineChart(document.getElementById('chart'));
+		gauge = new google.visualization.Gauge(document.getElementById('gauge'));
+        
 		pressesRef.on('child_added', function(snapshot) {
 				// Add new data to the table
 				//console.log(snapshot.key + ", " + snapshot.val());
@@ -38,6 +50,10 @@
 						(new Date(parseInt(snapshot.key) * 1000)),
 						parseInt(snapshot.val().count)
 				]);
+				
+				// Update gauge value
+				gaugeData.setValue(0, 1, parseInt(snapshot.val().count));
+				
 				// Redraw the chart with the new data
 				drawChart(data);
 		});
@@ -46,9 +62,8 @@
 	// Callback for updating the chart
 	function drawChart(data) {
 		// Instantiate and draw our chart, passing in some options.
-		var chart = new google.visualization.LineChart(document.getElementById('chart'));
 		chart.draw(data, { 'title':'Button Presses', 'interpolateNulls':true, 'height':480,
-				'legend':{position:'none'},
+				'width':1000, 'legend':{position:'none'},
 				hAxis: {
 					title: 'Time'
 				},
@@ -56,6 +71,7 @@
 					title: 'Presses'
 				}
 		});
+		gauge.draw(gaugeData, {'width':250, 'minorTicks': 10, 'max':500, 'min':0});
 	}
 		
 	</script>
@@ -63,7 +79,11 @@
 
   <body>
 	<center>
-	<div id="chart"></div>
+	<table class="columns">
+	<tr>
+	<td><div id="chart"></div></td><td><div id="gauge"></div></td>
+	</tr>
+	</table>
 	</center>
   </body>
 </html>
