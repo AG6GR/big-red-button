@@ -5,7 +5,7 @@
 Taking root from an impulse buy of a 10 cm large red arcade button during a clearance sale, this project is a simple Electric Imp-powered IoT button that posts to popular messaging platforms like Slack and GroupMe. The first iteration was thrown together during HackPrinceton Fall 2016, and posted messages to the "random" channel of the HackPrinceton Slack group. After the hackathon, the button was repurposed to serve as a kind of IoT dinner bell for the Brown Co-op at Princeton University, sending a message to the co-op GroupMe when dinner was ready.
 
 ## Hardware
-The hardware for the button centered around an Electric Imp <a target="_blank" href="https://electricimp.com/docs/hardware/resources/reference-designs/april/"> April development board</a> and a 10 cm illuminated red arcade button from <a target="_blank" href="https://www.adafruit.com/product/1185">Adafruit</a>. The setup was powered from a single 9V battery, with a NPN transistor used to control the button's light. 
+The hardware for the button centered on an Electric Imp <a target="_blank" href="https://electricimp.com/docs/hardware/resources/reference-designs/april/"> April development board</a> and a 10 cm illuminated red arcade button from <a target="_blank" href="https://www.adafruit.com/product/1185">Adafruit</a>. The setup was powered from a single 9V battery, with a NPN transistor used to control the button's light. 
 
 Taking a conservative estimate of 50mA at 3.3V for the imp001's power usage, the majority of the power consumed by the device comes from the LED in the button, which draws about 10mA at 9V. Thus, with a 600mAh 9V battery, the button could run continuously for well over 20 hours on a single 9V battery. In practice, code was added to place the imp in sleep mode after a certain run time, and the button is unlikely to be used for more than a few seconds every day. If we assume the device is run for a minute per day every day, the battery would need to be changed about once every 1200 days or 3 and a quarter years. 
 
@@ -13,7 +13,7 @@ Taking a conservative estimate of 50mA at 3.3V for the imp001's power usage, the
 
 <center><img src='docs/SlackMessage.png' alt='Slack Message'/></center>
 
-The most basic form of the device code used during the hackathon simply sent a message to the server-side agent whenever the imp detected a transition on the pin connected to the button's microswitch. Then the agent would make a HTTP POST request to <a target="_blank" href="https://api.slack.com/incoming-webhooks">Slack's Incomming Webhook API</a> with a predefinied message.
+The most basic form of the device code used during the hackathon simply sent a message to the server-side agent whenever the imp detected a transition on the pin connected to the button's microswitch. Then the agent would make a HTTP POST request to <a target="_blank" href="https://api.slack.com/incoming-webhooks">Slack's Incoming Webhook API</a> with a predefined message.
 
 In practice, the code is exceedingly simple, just 10 lines including comments! Here's the complete agent code:
 
@@ -30,7 +30,7 @@ device.on("Button Pressed", function(data) {
 });
 ```
 
-Here's the first revision of the device code, which had a basic timeout functionality built in to prevent people from spamming the list by mashing the button.
+Here's the first revision of the device code, which had basic timeout functionality built in to prevent people from spamming the list by mashing the button.
 
 ```squirrel
 server.log("Starting...")
@@ -84,7 +84,7 @@ device.on("Button Pressed", function(data) {
 
 <center><img src='docs/HackPrincetonDeploy.png' alt='HackPrinceton Deployment'/></center>
 
-The button was remarkably succesful, and attracted a lot of attention wherever it went. The Electric Imp platform and chat services' APIs worked very quickly, such that someone could press the button and receive a push notification on their phone without perceptible delay. 
+The button was remarkably successful, and attracted a lot of attention wherever it went. The Electric Imp platform and chat services' APIs worked very quickly, such that someone could press the button and receive a push notification on their phone without perceptible delay. 
 
 <center><img src='docs/HackPrincetonReaction.png' alt='HackPrinceton Reactions'/></center>
 
