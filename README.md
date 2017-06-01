@@ -1,6 +1,6 @@
 # Big Red IoT Button
 
-<center><img src='doc/Icon.JPG' alt='Big Red Button'/></center>
+<center><img src='docs/Icon.JPG' width=480px alt='Big Red Button'/></center>
 
 Taking root from an impulse buy of a 10 cm large red arcade button during a clearance sale, this project is a simple Electric Imp-powered IoT button that posts to popular messaging platforms like Slack and GroupMe. The first iteration was thrown together during HackPrinceton Fall 2016, and posted messages to the "random" channel of the HackPrinceton Slack group. After the hackathon, the button was repurposed to serve as a kind of IoT dinner bell for the Brown Co-op at Princeton University, sending a message to the co-op GroupMe when dinner was ready.
 
@@ -11,7 +11,7 @@ Taking a conservative estimate of 50mA at 3.3V for the imp001's power usage, the
 
 ## Slack
 
-<center><img src='doc/SlackMessage.png' alt='Slack Message'/></center>
+<center><img src='docs/SlackMessage.png' alt='Slack Message'/></center>
 
 The most basic form of the device code used during the hackathon simply sent a message to the server-side agent whenever the imp detected a transition on the pin connected to the button's microswitch. Then the agent would make a HTTP POST request to <a target="_blank" href="https://api.slack.com/incoming-webhooks">Slack's Incomming Webhook API</a> with a predefinied message.
 
@@ -60,7 +60,7 @@ pin_button.configure(DIGITAL_IN_WAKEUP, buttonPressed);
 
 ## GroupMe
 
-<center><img src='doc/GroupMeMessage.png' alt='Slack Message'/></center>
+<center><img src='docs/GroupMeMessage.png' alt='Slack Message'/></center>
 
 After the Hackathon the button was adapted to work with <a target="_blank" href=" https://dev.groupme.com/tutorials/bots">GroupMe's Bot API</a>. Creating a bot with the online form gives a Bot ID and Group ID which can then be used to post messages using HTTP POST requests. The same device code can be used, and the agent is practically identical.
 
@@ -82,10 +82,10 @@ device.on("Button Pressed", function(data) {
 
 ## Deployment
 
-<center><img src='doc/HackPrincetonDeploy.png' alt='HackPrinceton Deployment'/></center>
+<center><img src='docs/HackPrincetonDeploy.png' alt='HackPrinceton Deployment'/></center>
 
 The button was remarkably succesful, and attracted a lot of attention wherever it went. The Electric Imp platform and chat services' APIs worked very quickly, such that someone could press the button and get a push notification on their phone without perceptible delay. 
 
-<center><img src='doc/HackPrincetonReaction.png' alt='HackPrinceton Reactions'/></center>
+<center><img src='docs/HackPrincetonReaction.png' alt='HackPrinceton Reactions'/></center>
 
 The best part of this project was watching people's reactions. The physicality of pressing the button combined with the quick response and complete lack of wires made for a really compelling experience. Furthermore, the public visibility of the messages really helped to draw attention to the button and served as a subtle form of advertising for the Electric Imp platform. I think it played no small part in ensuring my Electric Imp workshop later that night was well attended. 
