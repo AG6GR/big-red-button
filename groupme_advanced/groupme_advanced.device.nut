@@ -1,7 +1,7 @@
 #require "Button.class.nut:1.2.0"
 
 // Timeout to prevent button spaming within an interval of TIMEOUT_TIME seconds 
-const SLEEP_DELAY = 20;
+const SLEEP_DELAY = 60;
 const SLEEP_DURATION = 600;
 const PRESSED_DURATION = 5;
 const BRIGHTNESS_DIM = 0.2;
@@ -57,7 +57,9 @@ function buttonPressed() {
     resetSleep()
 }
 function buttonReleased() {
-    imp.cancelwakeup(pressedTimer);
+    if (pressedTimer != null){
+        imp.cancelwakeup(pressedTimer);
+    }
     //server.log("Button Released")
     switch(currentState) {
         case STATES.HELD:

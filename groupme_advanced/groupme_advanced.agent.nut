@@ -1,15 +1,26 @@
-//slack_url <- "https://hooks.slack.com/services/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"
-groupme_url <- "https://api.groupme.com/v3/bots/post"
+#require "Firebase.class.nut:2.0.1"
+
+// ----- FIREBASE SETUP ----- //
+
+const FIREBASE_NAME = "firebaseid";
+const FIREBASE_AUTH_KEY = "firebaseauthkey";
+
+firebase <- Firebase(FIREBASE_NAME, FIREBASE_AUTH_KEY);
+
+// ----- GROUPME SETUP ----- //
+const groupme_url = "https://api.groupme.com/v3/bots/post"
+
+const debugbotid = "debugid"
+const debuggroupid = "debuggroupid"
+
+const brownbotid = "messageid";
+const groupid = "messagegroupid";
+
 bodytext <- "The Big Red Electric Imp Button has been pressed.";
 
-// Add API secrets here
-botid <- "debugbotid"
-groupid <- "debugchannelid"
+// ----- SCHEDULING CONSTANTS ----- //
 
-brownbotid <-"publicbotid";
-groupid <- "publicgroupid";
-
-const TIMEZONE = -5; // Hours before or behind UTC
+const TIMEZONE = -5;
 const DAY_SUNDAY = 0;
 const DAY_FRIDAY = 5;
 
@@ -21,14 +32,32 @@ if (!("pressCount" in savedData)){
     server.log("Restored pressCount = " + savedData.pressCount)
 }
 
+http.post(groupme_url, {"Content-type": "application/json"}, 
+    http.jsonencode({"text":"Agent restarted. pressCount = " + savedData.pressCount, "bot_id":debugbotid})).sendsync();
+
 device.on("Button Pressed", function(data) {
     // Record button press
     server.log("Button Pressed");
     savedData.pressCount++;
     server.save(savedData);
     
+    local uploaddata = {};
+    uploaddata.count <- savedData.pressCount;
+    
+    firebase.write("/presses/" + time(), uploaddata, function (error, response) {
+        if (error != null) {
+            server.error(error)
+            http.post(groupme_url, {"Content-type": "application/json"}, 
+                http.jsonencode({"text":"Firebase server error! " + error, "bot_id":debugbotid})).sendsync();
+        } else {
+            //server.log(response)
+        }
+    });
+    
+    /*
     http.post(groupme_url, {"Content-type": "application/json"}, 
-        http.jsonencode({"text":"Button has been pressed for the " + savedData.pressCount + " th time", "bot_id":botid})).sendsync();
+        http.jsonencode({"text":"Button has been pressed for the " + savedData.pressCount + " th time", "bot_id":debugbotid})).sendsync();
+    */
 })
 
 device.on("Broadcast Groupme", function(data) {
@@ -55,4 +84,9 @@ device.on("Broadcast Groupme", function(data) {
         http.post(groupme_url, {"Content-type": "application/json"}, 
             http.jsonencode({"text":bodytext, "bot_id":brownbotid})).sendsync();
     }
+});
+
+device.onconnect(function() {
+    http.post(groupme_url, {"Content-type": "application/json"}, 
+        http.jsonencode({"text":"Device connected", "bot_id":debugbotid})).sendsync();
 });
