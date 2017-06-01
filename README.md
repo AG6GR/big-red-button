@@ -62,7 +62,7 @@ pin_button.configure(DIGITAL_IN_WAKEUP, buttonPressed);
 
 <center><img src='docs/GroupMeMessage.png' alt='Slack Message'/></center>
 
-After the Hackathon the button was adapted to work with <a target="_blank" href=" https://dev.groupme.com/tutorials/bots">GroupMe's Bot API</a>. Creating a bot with the online form gives a Bot ID and Group ID which can then be used to post messages using HTTP POST requests. The same device code can be used, and the agent is practically identical.
+After the Hackathon the button was adapted to work with <a target="_blank" href=" https://dev.groupme.com/tutorials/bots">GroupMe's Bot API</a>. Creating a bot with the online form gives a Bot ID and Group ID which can then be used to post messages using HTTP POST requests. The same device code can be used, and the agent remained practically identical.
 
 ```squirrel
 // GroupMe post endpoint
@@ -84,7 +84,7 @@ device.on("Button Pressed", function(data) {
 
 <center><img src='docs/HackPrincetonDeploy.png' alt='HackPrinceton Deployment'/></center>
 
-The button was remarkably succesful, and attracted a lot of attention wherever it went. The Electric Imp platform and chat services' APIs worked very quickly, such that someone could press the button and get a push notification on their phone without perceptible delay. 
+The button was remarkably succesful, and attracted a lot of attention wherever it went. The Electric Imp platform and chat services' APIs worked very quickly, such that someone could press the button and receive a push notification on their phone without perceptible delay. 
 
 <center><img src='docs/HackPrincetonReaction.png' alt='HackPrinceton Reactions'/></center>
 
